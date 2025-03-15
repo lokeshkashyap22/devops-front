@@ -1,4 +1,9 @@
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/note';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const API_URL = process.env.APP_API_URL || 'http://localhost:8000/api/note';
+console.log("APP_API_URL:", process.env.APP_API_URL);
+console.log('API_URL:', API_URL);
 
 export const fetchNotes = async () => {
   try {
@@ -36,13 +41,15 @@ export const addNote = async (note) => {
 
 export const deleteNote = async (id) => {
   try {
+    console.log('Deleting note with id:', id);
     const response = await fetch(`${API_URL}/${id}`, {
       method: 'DELETE',
     });
     if (!response.ok) {
       throw new Error(`Failed to delete note: ${response.statusText}`);
     }
-    return response.json();
+    // Return an empty object if there's no content
+    return response.status === 204 ? {} : response.json();
   } catch (error) {
     console.error('Error deleting note:', error);
     throw new Error('Unable to delete note. Please try again.');
@@ -61,8 +68,8 @@ export const updateNote = async (id, updatedNote) => {
     if (!response.ok) {
       throw new Error(`Failed to update note: ${response.statusText}`);
     }
-    const data = await response.json();
-    return data;
+    // Return an empty object if there's no content
+    return response.status === 204 ? {} : response.json();
   } catch (error) {
     console.error('Error updating note:', error);
     throw new Error('Unable to update note. Please try again.');
