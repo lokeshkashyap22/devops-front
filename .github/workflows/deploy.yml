@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       # Step 1: Checkout Code
       - name: Checkout Code
@@ -32,21 +32,14 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/nextjs-app
 
       # Step 5: Deploy to EC2 via SSH
-      - name: Deploy to EC2 Instance
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          touch ~/.ssh/known_hosts
-          echo "${{ secrets.KNOWN_HOST }}" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/id_rsa
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@ec2-44-212-7-95.compute-1.amazonaws.com "docker pull ${{ secrets.DOCKER_USERNAME }}/nextjs-app && docker stop nextjs-container || true && docker rm nextjs-container || true && docker run -d --name nextjs-container -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/nextjs-app"
-        # uses: appleboy/ssh-action@v0.1.7
-        # with:
-        #   host: ${{ secrets.EC2_HOST }}
-        #   username: ${{ secrets.EC2_USER }}
-        #   key: ${{ secrets.SSH_PRIVATE_KEY }}
-        #   script: |
-        #     docker pull ${{ secrets.DOCKER_USERNAME }}/nextjs-app
-        #     docker stop nextjs-container || true
-        #     docker rm nextjs-container || true
-        #     docker run -d --name nextjs-container -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/nextjs-app
+      - name: Deploy to EC2 using SSH
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/nextjs-app
+            docker stop nextjs-container || true
+            docker rm nextjs-container || true
+            docker run -d --name nextjs-container -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/nextjs-app
