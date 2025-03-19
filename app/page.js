@@ -105,7 +105,7 @@ const Notes = () => {
   return (
     <div>
       <h1 className="text-green-900 text-2xl underline">
-        Practice Project for DevOps. ADD CICD PIPEPLINE USING GITHUB ACTIONS
+        Practice Project for DevOps. ADD CICD PIPEPLINE USING GITHUB ACTIONS AND ec2 and docker!!!
       </h1>
       {error && <p className="text-red-500">{error}</p>}
       <div>
