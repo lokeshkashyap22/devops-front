@@ -20,7 +20,7 @@ jobs:
 
     # Step 3: Build Docker Image
     - name: Build Docker Image
-      run: docker build -t your-dockerhub-username/your-image-name .
+      run: docker build -t lokeshkashyap22/my-nextjs .
 
     # Step 4: Push Image to Docker Hub
     - name: Log in to Docker Hub
@@ -30,7 +30,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     
     - name: Push Image to Docker Hub
-      run: docker push your-dockerhub-username/your-image-name
+      run: docker push lokeshkashyap22/my-nextjs
 
     # Step 5: Deploy to EC2
     - name: Deploy to EC2 via SSH
@@ -40,7 +40,7 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          docker pull your-dockerhub-username/your-image-name
+          docker pull lokeshkashyap22/my-nextjs
           docker stop current-container || true
           docker rm current-container || true
-          docker run -d --name nextjs-container -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/nextjs-app
+          docker run -d --name nextjs-container -p 3000:3000 lokeshkashyap22/my-nextjs
