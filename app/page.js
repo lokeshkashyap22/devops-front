@@ -53,10 +53,12 @@ const Notes = () => {
     }
     try {
       await deleteNote(noteId);
-      setNotes(notes.filter((note) => {
-        const currentId = note.id || note._id;
-        return currentId !== noteId;
-      }));
+      setNotes(
+        notes.filter((note) => {
+          const currentId = note.id || note._id;
+          return currentId !== noteId;
+        })
+      );
       setError("");
     } catch (error) {
       setError("Failed to delete note. Please try again.");
@@ -103,7 +105,7 @@ const Notes = () => {
   return (
     <div>
       <h1 className="text-green-900 text-2xl underline">
-        Practice Project for DevOps
+        Practice Project for DevOps. ADD CICD PIPEPLINE USING GITHUB ACTIONS
       </h1>
       {error && <p className="text-red-500">{error}</p>}
       <div>
@@ -111,18 +113,14 @@ const Notes = () => {
           type="text"
           placeholder="Title"
           value={newNote.title}
-          onChange={(e) =>
-            setNewNote({ ...newNote, title: e.target.value })
-          }
+          onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
           className="border p-2 m-2"
         />
         <input
           type="text"
           placeholder="Content"
           value={newNote.content}
-          onChange={(e) =>
-            setNewNote({ ...newNote, content: e.target.value })
-          }
+          onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
           className="border p-2 m-2"
         />
         <button
@@ -136,7 +134,10 @@ const Notes = () => {
         {notes.map((note) => {
           const noteId = note.id || note._id; // Use whichever field exists
           return (
-            <div key={noteId || Math.random()} className="m-2 p-2 border rounded">
+            <div
+              key={noteId || Math.random()}
+              className="m-2 p-2 border rounded"
+            >
               <Card title={note.title} content={note.content} />
               <button
                 onClick={() => handleEditClick(note)}
